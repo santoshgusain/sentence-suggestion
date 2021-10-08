@@ -17,6 +17,7 @@ function Nextbutton(props) {
   return (
     <Stack direction="row" spacing={2}>
       <Button
+        sx={{ "margin-left": "auto" }}
         onClick={props.changeSentence}
         variant="contained"
         endIcon={<SendIcon />}
@@ -83,7 +84,6 @@ class Main extends Component {
       count: count + 1,
     });
   };
-
 
   render() {
     return (
