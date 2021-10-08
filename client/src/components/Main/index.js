@@ -11,6 +11,10 @@ import Stack from "@mui/material/Stack";
 
 import { connect } from "react-redux";
 import { loadSentence } from "../../store/actions/sentence";
+import Loader from "../Loading";
+import SkeletonText from "../SkeletonText";
+import BottomNav from "../BottomNav";
+
 
 // next button
 function Nextbutton(props) {
@@ -48,9 +52,9 @@ class Main extends Component {
     super(props);
     const { sentences } = props;
     this.state = {
+      loading: true,
       count: 0,
-      sentence:
-        "Pin a footer to the bottom of the viewport.The footer will move as the main element of the page grows.",
+      sentence: null,
       sentences,
     };
   }
@@ -67,7 +71,7 @@ class Main extends Component {
       min = 0,
       index = Math.floor(Math.random() * (max - min) + min),
       sentence = sentences[index];
-    this.setState({ ...this.state, sentences, sentence });
+    this.setState({ ...this.state, sentences, sentence, loading: false });
   };
 
   // For changing sentence which is shown
@@ -86,6 +90,7 @@ class Main extends Component {
   };
 
   render() {
+    let { loading } = this.state;
     return (
       <Box
         sx={{
@@ -94,13 +99,18 @@ class Main extends Component {
           minHeight: "100vh",
         }}
       >
+        {loading ? <Loader /> : ""}
         <CssBaseline />
         <Container component="main" sx={{ mt: 8, mb: 2 }} maxWidth="sm">
           <Typography variant="h2" component="h1" gutterBottom>
             {"Sentence"}
           </Typography>
           <Typography sx={{ mb: 4 }} variant="h5" component="h2" gutterBottom>
-            {this.state.sentence}
+            {this.state.sentence == null ? (
+              <SkeletonText />
+            ) : (
+              this.state.sentence
+            )}
           </Typography>
         </Container>
 
@@ -118,7 +128,7 @@ class Main extends Component {
           <Box
             component="div"
             sx={{
-              py: 3,
+              py: 1,
               px: 2,
               backgroundColor: (theme) =>
                 theme.palette.mode === "light"
@@ -127,6 +137,10 @@ class Main extends Component {
             }}
           >
             <Container maxWidth="sm">
+             
+              <Typography variant="body1">
+                <BottomNav />
+              </Typography>
               <Typography variant="body1">
                 Improve your sentence pronunciation here by practising it
                 everyday.
