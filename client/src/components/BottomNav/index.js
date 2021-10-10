@@ -15,7 +15,7 @@ export default function LabelBottomNavigation() {
   };
 
   return (
-    <BottomNavigation sx={{ width: "100%" }} value={value} onChange={handleChange}>
+    <BottomNavigation sx={{ width: "100%",height:"100%" }} value={value} onChange={handleChange}>
 
       <BottomNavigationAction
         component={Menu}

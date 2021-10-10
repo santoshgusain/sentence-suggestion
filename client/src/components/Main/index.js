@@ -133,6 +133,7 @@ class Main extends Component {
             sx={{
               pt: 1,
               px: 2,
+              mt: "auto",
               backgroundColor: (theme) =>
                 theme.palette.mode === "light"
                   ? theme.palette.grey[200]
