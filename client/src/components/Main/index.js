@@ -15,7 +15,6 @@ import Loader from "../Loading";
 import SkeletonText from "../SkeletonText";
 import BottomNav from "../BottomNav";
 
-
 // next button
 function Nextbutton(props) {
   return (
@@ -35,9 +34,13 @@ function Nextbutton(props) {
 // copyright text
 function Copyright() {
   return (
-    <Typography variant="body2" color="text.secondary">
+    <Typography
+      sx={{ textAlign: "center", fontSize: "10px" }}
+      variant="body2"
+      color="text.secondary"
+    >
       {"Copyright © "}
-      <Link color="inherit" href="javascript:void()">
+      <Link color="inherit" href={"javascript:void()"}>
         Santosh Gusain
       </Link>{" "}
       {new Date().getFullYear()}
@@ -128,7 +131,7 @@ class Main extends Component {
           <Box
             component="div"
             sx={{
-              py: 1,
+              pt: 1,
               px: 2,
               backgroundColor: (theme) =>
                 theme.palette.mode === "light"
@@ -137,13 +140,8 @@ class Main extends Component {
             }}
           >
             <Container maxWidth="sm">
-             
               <Typography variant="body1">
                 <BottomNav />
-              </Typography>
-              <Typography variant="body1">
-                Improve your sentence pronunciation here by practising it
-                everyday.
               </Typography>
               <Copyright />
             </Container>
