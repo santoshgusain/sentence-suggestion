@@ -8,7 +8,7 @@ export const loadSentence = () => async (dispatch, getState) => {
       payload: true,
     });
 
-    const sentences = (await axios.get("https://sentence-suggestion.herokuapp.com/sentence")).data;
+    const sentences = (await axios.get("https://sentence-suggestion.herokuapp.com/api/sentence")).data;
     dispatch({
       type: sentenceTypes.LOAD_SENTENCE,
       payload: { sentences },
