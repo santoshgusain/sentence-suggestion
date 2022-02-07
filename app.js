@@ -1,30 +1,31 @@
 require("dotenv").config();
-var createError = require("http-errors");
 var express = require("express");
 var cors = require("cors");
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
-
+const { logUser } = require("./middleware/logUser");
 
 const db = require("./config/db");
 db();
 
 var app = express();
+
+var useragent = require("express-useragent");
+
+app.use(useragent.express());
+
 app.use(express.static(path.join(__dirname, "client/build")));
 app.use(cors());
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
+app.use(cookieParser("santosh"));
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use("/api", require("./routes"));
+app.use(logUser);
 
-// catch 404 and forward to error handler
-app.use(function (req, res, next) {
-  next(createError(404));
-});
+app.use("/api", require("./routes"));
 
 // error handler
 app.use(function (err, req, res, next) {
@@ -35,12 +36,6 @@ app.use(function (err, req, res, next) {
   // render the error page
   res.status(err.status || 500);
   res.render("error");
-});
-
-
-/* GET home page. */
-app.get("/", function (req, res, next) {
-  res.json("hello world");
 });
 
 module.exports = app;

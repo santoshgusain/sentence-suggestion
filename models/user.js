@@ -16,6 +16,10 @@ const userSchema = new Schema({
     type: String,
     default: null,
   },
+  password: {
+    type: String,
+    default: null,
+  },
   mobile: {
     type: String,
     default: null,
@@ -24,7 +28,11 @@ const userSchema = new Schema({
   dob: {
     type: Date,
     required: true,
-  }
+  },
+  isLogin: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 module.exports = mongoose.model("User", userSchema);
