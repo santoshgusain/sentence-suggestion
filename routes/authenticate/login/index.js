@@ -31,8 +31,9 @@ router.post("/", async (req, res) => {
         signed: true,
       })
       .json({
+        success: true,
         msg: "login success",
-        data: {
+        user: {
           ...userData,
           token: accesstoken,
         },
@@ -40,7 +41,9 @@ router.post("/", async (req, res) => {
     // send response to the client
   } catch (err) {
     console.log(err);
-    return res.status(404).send("what???");
+    return res
+      .status(422)
+      .json({ success: false, msg: "Invalid email or password" });
   }
 });
 
