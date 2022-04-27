@@ -5,7 +5,6 @@ var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 const { logUser } = require("./middleware/logUser");
-const PORT = process.env.PORT||3001;
 
 const db = require("./config/db");
 db();
@@ -39,12 +38,4 @@ app.use(function (err, req, res, next) {
   res.render("error");
 });
 
-
-app.listen(PORT,(err)=>{
-  if(err)
-    console.log(err);
-    else
-    console.log(`app running on ${PORT}`);
-});
-
-// module.exports = app;
+module.exports = app;
