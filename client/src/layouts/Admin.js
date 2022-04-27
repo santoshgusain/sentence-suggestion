@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useEffect } from "react";
 import { styled, useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import MuiDrawer from "@mui/material/Drawer";
@@ -19,6 +19,12 @@ import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
 import AccountMenu from "../components/AccountMenu";
 import { Link } from "react-router-dom";
+import { Snackbar, Alert as MuiAlert } from "@mui/material";
+import { useSelector } from "redux";
+
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 const drawerWidth = 240;
 
@@ -90,6 +96,21 @@ const Drawer = styled(MuiDrawer, {
 function Admin({ component: Component }) {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
+
+  const [alertOpen, setAlertOpen] = React.useState(true);
+
+  // useSelector();
+
+  const handleAlertClick = () => {
+    setAlertOpen(true);
+  };
+
+  const handleAlertClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setAlertOpen(false);
+  };
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -167,6 +188,19 @@ function Admin({ component: Component }) {
         <DrawerHeader />
         <div>{Component ? <Component /> : ""}</div>
       </Box>
+      <Snackbar
+        open={alertOpen}
+        autoHideDuration={6000}
+        onClose={handleAlertClose}
+      >
+        <Alert
+          onClose={handleAlertClose}
+          severity="success"
+          sx={{ width: "100%" }}
+        >
+          This is a success message!
+        </Alert>
+      </Snackbar>
     </Box>
   );
 }

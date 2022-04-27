@@ -38,4 +38,12 @@ app.use(function (err, req, res, next) {
   res.render("error");
 });
 
-module.exports = app;
+
+app.listen(3001,(err)=>{
+  if(err)
+    console.log(err);
+    else
+    console.log('app running on 3001');
+});
+
+// module.exports = app;

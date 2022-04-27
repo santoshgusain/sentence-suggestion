@@ -7,7 +7,7 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import Menu from "../Menu";
 
-export default function LabelBottomNavigation() {
+export default function BottomMenu() {
   const [value, setValue] = React.useState("recents");
 
   const handleChange = (event, newValue) => {
@@ -15,8 +15,11 @@ export default function LabelBottomNavigation() {
   };
 
   return (
-    <BottomNavigation sx={{ width: "100%",height:"100%" }} value={value} onChange={handleChange}>
-
+    <BottomNavigation
+      sx={{ width: "100%", height: "100%" }}
+      value={value}
+      onChange={handleChange}
+    >
       <BottomNavigationAction
         component={Menu}
         label="Recents"

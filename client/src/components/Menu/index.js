@@ -12,8 +12,11 @@ import PersonAdd from "@mui/icons-material/PersonAdd";
 import Settings from "@mui/icons-material/Settings";
 import Logout from "@mui/icons-material/Logout";
 import { NavLink } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 export default function AccountMenu() {
+  const { login } = useSelector((state) => state.authenticateReducer);
+
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -71,17 +74,31 @@ export default function AccountMenu() {
         anchorOrigin={{ horizontal: "left", vertical: "top" }}
       >
         <MenuItem>
-          <NavLink
-            style={{
-              textDecoration: "none",
-              display: "flex",
-              alignItems: "center",
-              color: "black",
-            }}
-            to="/login"
-          >
-            <Avatar /> Login
-          </NavLink>
+          {login == "false" ? (
+            <NavLink
+              style={{
+                textDecoration: "none",
+                display: "flex",
+                alignItems: "center",
+                color: "black",
+              }}
+              to="/login"
+            >
+              <Avatar /> Login
+            </NavLink>
+          ) : (
+            <NavLink
+              style={{
+                textDecoration: "none",
+                display: "flex",
+                alignItems: "center",
+                color: "black",
+              }}
+              to="/dashboard"
+            >
+              <Avatar /> Dashboard
+            </NavLink>
+          )}
         </MenuItem>
         {/* <MenuItem>
           <Avatar /> My account

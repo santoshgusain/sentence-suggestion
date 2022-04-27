@@ -1,15 +1,21 @@
-import * as React from "react";
-import Box from "@mui/material/Box";
-import Avatar from "@mui/material/Avatar";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import IconButton from "@mui/material/IconButton";
-import Tooltip from "@mui/material/Tooltip";
+import React, { useEffect } from "react";
+import {
+  Tooltip,
+  IconButton,
+  MenuItem,
+  ListItemIcon,
+  Menu,
+  Avatar,
+  Box,
+} from "@mui/material";
+import { useSelector, useDispatch } from "react-redux";
+import { NavLink, useHistory } from "react-router-dom";
 import Logout from "@mui/icons-material/Logout";
-import { NavLink } from "react-router-dom";
+import { logoutAction } from "../../store/actions/authenticate";
 
 export default function AccountMenu() {
+  const dispatch = useDispatch();
+  const history = useHistory();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -18,6 +24,19 @@ export default function AccountMenu() {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const authenticateReducer = useSelector((state) => state.authenticateReducer);
+  useEffect(() => {
+    if (authenticateReducer.login == "false") {
+      history.push("/login");
+    }
+  }, [authenticateReducer]);
+
+  const logoutUser = (event) => {
+    event.preventDefault();
+    dispatch(logoutAction());
+  };
+
   return (
     <React.Fragment>
       <Box sx={{ display: "flex", alignItems: "center", textAlign: "center" }}>
@@ -69,19 +88,25 @@ export default function AccountMenu() {
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
-        <MenuItem>
+        <MenuItem
+          onClick={() => {
+            history.push("/profile");
+          }}
+        >
           <Avatar /> Profile
         </MenuItem>
-        <MenuItem>
-          <Avatar /> My account
+        <MenuItem
+          onClick={() => {
+            history.push("/");
+          }}
+        >
+          <Avatar /> Home
         </MenuItem>
-        <MenuItem>
-          <NavLink to="/login">
-            <ListItemIcon>
-              <Logout fontSize="small" />
-            </ListItemIcon>
-            Logout
-          </NavLink>
+        <MenuItem onClick={logoutUser}>
+          <ListItemIcon>
+            <Logout fontSize="small" />
+          </ListItemIcon>
+          Logout
         </MenuItem>
       </Menu>
     </React.Fragment>
