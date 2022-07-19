@@ -22,13 +22,25 @@ router.post("/", async function (req, res, next) {
     res.status(400).send(err.message);
   }
 });
-/* GET users listing. */
-router.get("/", async function (req, res, next) {
+
+// list all users
+router.get("/", async (req, res) => {
   try {
-   res.json("fetching user details");
+    let { perPage = 5, page = 0 } = req.query;
+    perPage = parseInt(perPage);
+    page = parseInt(page);
+
+    let [rows, totalCount] = await Promise.all([
+      User.find()
+        .limit(perPage)
+        .skip(perPage * page),
+      User.countDocuments(),
+    ]);
+
+    res.json({ users: { numRows: rows?.length || 0, totalCount, rows } });
   } catch (err) {
     console.error(err);
-    res.status(400).send(err.message);
+    res.status(500).send(err.message);
   }
 });
 

@@ -18,15 +18,10 @@ import ListItemText from "@mui/material/ListItemText";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
 import AccountMenu from "../components/AccountMenu";
-import { Link } from "react-router-dom";
-import { Snackbar, Alert as MuiAlert } from "@mui/material";
-import { useSelector } from "redux";
+import { Link, useHistory } from "react-router-dom";
+import Loader from "../components/Loading";
 
-const Alert = React.forwardRef(function Alert(props, ref) {
-  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
-});
-
-const drawerWidth = 240;
+const drawerWidth = 200;
 
 const openedMixin = (theme) => ({
   width: drawerWidth,
@@ -95,22 +90,15 @@ const Drawer = styled(MuiDrawer, {
 
 function Admin({ component: Component }) {
   const theme = useTheme();
-  const [open, setOpen] = React.useState(false);
+  const history = useHistory();
+  const [open, setOpen] = React.useState(true);
 
-  const [alertOpen, setAlertOpen] = React.useState(true);
-
-  // useSelector();
-
-  const handleAlertClick = () => {
-    setAlertOpen(true);
-  };
-
-  const handleAlertClose = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
+  useEffect(() => {
+    const status = localStorage.getItem("user");
+    if (status != "1") {
+      return history.push("/login");
     }
-    setAlertOpen(false);
-  };
+  });
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -137,9 +125,7 @@ function Admin({ component: Component }) {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap component="div">
-            Welcome! Dashboard
-          </Typography>
+          <Typography variant="h6" component="div"></Typography>
           <Typography
             sx={{
               display: "flex",
@@ -150,12 +136,13 @@ function Admin({ component: Component }) {
             noWrap
             component="div"
           >
-            <AccountMenu></AccountMenu>
+            <AccountMenu />
           </Typography>
         </Toolbar>
       </AppBar>
       <Drawer variant="permanent" open={open}>
         <DrawerHeader>
+          Admin Panel
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === "rtl" ? (
               <ChevronRightIcon />
@@ -168,10 +155,10 @@ function Admin({ component: Component }) {
         <List>
           {[
             { title: "Dashboard", link: "/dashboard" },
-            { title: "Visits", link: "/visits" },
-            { title: "List Sentences", link: "/sentences" },
-            { title: "List Notes", link: "/notes" },
-            { title: "Calendar", link: "/calendar" },
+            { title: "Visitors", link: "/visits" },
+            { title: "Saved Notes", link: "/notes" },
+            // { title: "List Sentences", link: "/sentences" },
+            // { title: "Calendar", link: "/calendar" },
           ].map((el, index) => (
             <Link style={{ textDecoration: "none", all: "unset" }} to={el.link}>
               <ListItem button key={el.title}>
@@ -184,23 +171,13 @@ function Admin({ component: Component }) {
           ))}
         </List>
       </Drawer>
-      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+      <Box component="main" sx={{ flexGrow: 1, p: 1 }}>
         <DrawerHeader />
-        <div>{Component ? <Component /> : ""}</div>
+        <Typography sx={{ mb: 0.5 }}>
+          <Loader />
+        </Typography>
+        {Component ? <Component /> : <div></div>}
       </Box>
-      <Snackbar
-        open={alertOpen}
-        autoHideDuration={6000}
-        onClose={handleAlertClose}
-      >
-        <Alert
-          onClose={handleAlertClose}
-          severity="success"
-          sx={{ width: "100%" }}
-        >
-          This is a success message!
-        </Alert>
-      </Snackbar>
     </Box>
   );
 }

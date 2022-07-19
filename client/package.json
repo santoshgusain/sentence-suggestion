@@ -15,6 +15,7 @@
     "@testing-library/user-event": "^12.1.10",
     "axios": "^0.22.0",
     "material-ui-search-bar": "^1.0.0",
+    "mui-datatables": "^4.2.2",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-redux": "^7.2.5",
@@ -23,6 +24,7 @@
     "redux": "^4.1.1",
     "redux-devtools-extension": "^2.13.9",
     "redux-thunk": "^2.3.0",
+    "tinycolor2": "^1.4.2",
     "web-vitals": "^1.0.1"
   },
   "scripts": {

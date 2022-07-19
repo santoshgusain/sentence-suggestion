@@ -26,14 +26,16 @@ export default function AccountMenu() {
   };
 
   const authenticateReducer = useSelector((state) => state.authenticateReducer);
-  useEffect(() => {
-    if (authenticateReducer.login == "false") {
-      history.push("/login");
-    }
-  }, [authenticateReducer]);
+  // useEffect(() => {
+  //   if (authenticateReducer.login == "false") {
+  //     history.push("/login");
+  //   }
+  // }, [authenticateReducer]);
 
   const logoutUser = (event) => {
     event.preventDefault();
+    localStorage.clear();
+    history.push("/login");
     dispatch(logoutAction());
   };
 

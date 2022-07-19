@@ -1,27 +1,32 @@
 import { visitTypes } from "../types";
+import axios from "axios";
+import { loadingTypes } from "../types";
 
-export const loadVisits = () => async (dispatch, getState) => {
-  try {
-    dispatch({
-      type: visitTypes.IS_LOADING,
-      payload: true,
-    });
+export const loadVisits =
+  ({ perPage = 5, page = 0, sort = "_id", order = "desc" }) =>
+  async (dispatch, getState) => {
+    try {
+      dispatch({
+        type: loadingTypes.LOADING,
+      });
 
-    const visits = [
-      { id: 1, name: "Hello", col2: "World" },
-      { id: 2, name: "DataGridPro", col2: "is Awesome" },
-      { id: 3, name: "MUI", col2: "is Amazing" },
-      { id: 4, name: "MUI", col2: "is Amazing" },
-      { id: 5, name: "MUI", col2: "is Amazing" },
-      { id: 6, name: "MUI", col2: "is Amazing" },
-      { id: 7, name: "MUI", col2: "is Amazing" },
-      { id: 8, name: "MUI", col2: "is Amazing" },
-    ];
-    dispatch({
-      type: visitTypes.LOAD_VISITS,
-      payload: { visits },
-    });
-  } catch (error) {
-    console.error(JSON.stringify(error));
-  }
-};
+      const sentences = (
+        await axios.get("http://localhost:3001/api/logs", {
+          params: { perPage, page, sort, order },
+        })
+      )?.data;
+
+      dispatch({
+        type: loadingTypes.LOADED,
+      });
+      dispatch({
+        type: visitTypes.LOAD_VISITS,
+        payload: sentences,
+      });
+    } catch (error) {
+      dispatch({
+        type: loadingTypes.LOADED,
+      });
+      console.log("Error=====================", JSON.stringify(error));
+    }
+  };

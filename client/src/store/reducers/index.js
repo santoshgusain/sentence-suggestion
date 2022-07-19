@@ -3,6 +3,7 @@ import { combineReducers } from "redux";
 import sentenceReducer from "./sentence";
 import visitReducer from "./visits";
 import authenticateReducer from "./authenticate";
+import loadingReducer from "./loading";
 
 export default combineReducers({
   alert() {
@@ -11,4 +12,5 @@ export default combineReducers({
   sentenceReducer,
   visitReducer,
   authenticateReducer,
+  loadingReducer,
 });

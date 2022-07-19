@@ -1,10 +1,11 @@
 import React from "react";
-import { CircularProgress, Typography } from "@mui/material";
+import { CircularProgress, Typography, IconButton } from "@mui/material";
 import MUIDataTable from "mui-datatables";
 import { connect } from "react-redux";
-import { loadVisits } from "../../store/actions/visits";
+import { listSentences } from "../../store/actions/sentence";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
 
-class Visit extends React.Component {
+class Note extends React.Component {
   state = {
     page: 0,
     count: 1,
@@ -18,32 +19,9 @@ class Visit extends React.Component {
         options: {},
       },
       {
-        name: "browser",
-        label: "Browser",
-      },
-      {
-        name: "isLinux",
-        label: "Linux",
-      },
-      {
-        name: "isMac",
-        label: "Mac",
-      },
-      {
-        name: "isMobile",
-        label: "Mobile",
-      },
-      {
-        name: "platform",
-        label: "Platform",
-      },
-      {
-        name: "os",
-        label: "OS",
-      },
-      {
-        name: "source",
-        label: "Source",
+        name: "sentence",
+        label: "Sentence",
+        options: {},
       },
     ],
     isLoading: false,
@@ -56,13 +34,16 @@ class Visit extends React.Component {
   // get data
   getData = async () => {
     this.setState({ isLoading: true });
-    this.props.loadVisits();
+    this.props.listSentences();
     this.setState({ isLoading: false, count: 100 });
   };
 
   sort = (page, sortOrder) => {
     this.setState({ isLoading: true });
     this.setState({
+      // data: res.data,
+      // page: res.page,
+      // count: res.total,
       sortOrder,
       isLoading: false,
     });
@@ -81,29 +62,13 @@ class Visit extends React.Component {
 
   render() {
     const { page, count, isLoading, rowsPerPage, sortOrder } = this.state;
-
-    const visitors = this.props.visitReducer?.visitors.rows.map(
-      ({ userAgent, _id }) => {
-        const { browser, isLinux, isMac, isMobile, os, platform, source } =
-          userAgent;
-        return {
-          browser,
-          isLinux: isLinux?.toString(),
-          isMac: isMac?.toString(),
-          isMobile: isMobile?.toString(),
-          os,
-          platform,
-          source,
-          _id,
-        };
-      }
-    );
+    const { rows: data } = this.props?.savedSentences;
 
     const options = {
       page,
+      filter: true,
       print: false,
       download: false,
-      filter: true,
       filterType: "dropdown",
       responsive: "vertical",
       serverSide: true,
@@ -114,18 +79,17 @@ class Visit extends React.Component {
       onTableChange: (action, tableState) => {
         // a developer could react to change on an action basis or
         // examine the state as a whole and do whatever they want
-
         switch (action) {
           case "changePage":
             this.changePage(tableState.page, tableState.sortOrder);
-            this.props.loadVisits({
+            this.props.listSentences({
               perPage: tableState.rowsPerPage,
               page: tableState.page,
             });
             break;
           case "sort":
             const { name: sort, direction: order } = tableState.sortOrder;
-            this.props.loadVisits({
+            this.props.listSentences({
               perPage: tableState.rowsPerPage,
               page: tableState.page,
               sort,
@@ -139,7 +103,7 @@ class Visit extends React.Component {
             break;
           case "changeRowsPerPage":
             // this.sort(tableState.page, tableState.sortOrder);
-            this.props.loadVisits({
+            this.props.listSentences({
               perPage: tableState.rowsPerPage,
               page: 0,
             });
@@ -147,7 +111,10 @@ class Visit extends React.Component {
               page: 0,
               rowsPerPage: tableState.rowsPerPage,
             });
-            console.log(tableState.rowsPerPage);
+            console.log(
+              "current row per page==================",
+              tableState.rowsPerPage
+            );
             // this.setState({
             //   rowsPerPage: tableState.rowsPerPage,
             // });
@@ -164,7 +131,10 @@ class Visit extends React.Component {
         <MUIDataTable
           title={
             <Typography variant="h6">
-              Visitors Data
+              Saved Notes
+              <IconButton aria-label="Add Note" color="primary" size="large">
+                <AddCircleIcon />
+              </IconButton>
               {isLoading && (
                 <CircularProgress
                   size={24}
@@ -173,7 +143,7 @@ class Visit extends React.Component {
               )}
             </Typography>
           }
-          data={visitors}
+          data={data}
           columns={this.state.columns}
           options={options}
         />
@@ -183,16 +153,14 @@ class Visit extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-  return {
-    visitReducer: state?.visitReducer,
-  };
+  return state?.sentenceReducer;
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    loadVisits: (params = {}) => {
-      dispatch(loadVisits(params));
+    listSentences: (params = {}) => {
+      dispatch(listSentences(params));
     },
   };
 };
-export default connect(mapStateToProps, mapDispatchToProps)(Visit);
+export default connect(mapStateToProps, mapDispatchToProps)(Note);

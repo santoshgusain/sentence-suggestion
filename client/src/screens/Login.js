@@ -1,71 +1,110 @@
 import { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
-import { Container, Box, Grid, TextField, Button } from "@mui/material";
+import {
+  Container,
+  Box,
+  Grid,
+  TextField,
+  Button,
+  Snackbar,
+  Typography,
+} from "@mui/material";
 import { LockOpen, RequestPageOutlined } from "@mui/icons-material";
 import { useSelector, useDispatch } from "react-redux";
-import { loginAction } from "../store/actions/authenticate";
+import { login } from "../store/actions/authenticate";
+import CustomSnackBar from "../components/CustomSnackBar";
+import Loader from "../components/Loading";
+
+function useSessionCheck() {
+  const history = useHistory();
+  const status = localStorage.getItem("user");
+  if (status == "1") {
+    return history.push("/dashboard");
+  }
+}
 
 function Login(props) {
   const history = useHistory();
+  const dispatch = useDispatch();
+  const authenticateReducer = useSelector((state) => state.authenticateReducer);
+
+  const [popupStatus, setPopupStatus] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const dispatch = useDispatch();
-  const authenticateReducer = useSelector((state) => state.authenticateReducer);
+  useSessionCheck();
+
+  // component did mount
   useEffect(() => {
-    if (authenticateReducer.login == "true") {
+    setPopupStatus(false);
+  });
+  // component on update
+  useEffect(() => {
+    if (authenticateReducer.login) {
+      localStorage.setItem("user", "1");
       history.push("/dashboard");
     }
-  }, [props, authenticateReducer]);
+    setPopupStatus(true);
+    console.log("pushing to dashboard===================================");
+  }, [authenticateReducer.error, authenticateReducer.login]);
 
+  // handle authentication
   function authenticate(event, name) {
     event.preventDefault();
-    const credentials = { email, password };
-    dispatch(loginAction(credentials));
+    dispatch(login({ email, password }));
   }
 
   return (
-    <Container>
-      <Box sx={{ width: "45%", display: "grid", margin: "auto" }}>
-        <h1>Sign In</h1>
-        <Grid container xs={12}>
-          <form onSubmit={(event) => authenticate(event, "santosh")}>
-            <TextField
-              fullWidth
-              id="outlined-required"
-              label="Email"
-              margin="dense"
-              value={email}
-              onChange={(event) => {
-                setEmail(event.target.value);
-              }}
-            />
-            <TextField
-              margin="dense"
-              fullWidth
-              id="outlined-password-input"
-              label="Password"
-              type="password"
-              autoComplete="current-password"
-              value={password}
-              onChange={(event) => {
-                setPassword(event.target.value);
-              }}
-            />
-            <Button
-              type="submit"
-              size="large"
-              margin="dense"
-              fullWidth
-              variant="contained"
-              endIcon={<LockOpen />}
-            >
-              Login
-            </Button>
-          </form>
-        </Grid>
-      </Box>
-    </Container>
+    <>
+      <Typography sx={{ mb: 0.5 }}>
+        <Loader />
+      </Typography>
+      <Container>
+        <Box sx={{ width: "45%", display: "grid", margin: "auto" }}>
+          <CustomSnackBar
+            open={popupStatus}
+            msg={authenticateReducer.error?.msg || null}
+          />
+          <h1>Sign In</h1>
+          <Grid container xs={12}>
+            <form onSubmit={(event) => authenticate(event, "santosh")}>
+              <TextField
+                fullWidth
+                id="outlined-required"
+                label="Email"
+                margin="dense"
+                value={email}
+                onChange={(event) => {
+                  setEmail(event.target.value);
+                }}
+              />
+              <TextField
+                margin="dense"
+                fullWidth
+                id="outlined-password-input"
+                label="Password"
+                type="password"
+                autoComplete="current-password"
+                value={password}
+                onChange={(event) => {
+                  setPassword(event.target.value);
+                }}
+              />
+              <Button
+                type="submit"
+                size="large"
+                margin="dense"
+                fullWidth
+                variant="contained"
+                endIcon={<LockOpen />}
+              >
+                Login
+              </Button>
+            </form>
+          </Grid>
+        </Box>
+      </Container>
+    </>
   );
 }
 

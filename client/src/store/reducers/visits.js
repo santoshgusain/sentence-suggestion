@@ -2,7 +2,11 @@ import { visitTypes } from "../types";
 
 const initialState = {
   isLoading: false,
-  visits: [],
+  visitors: {
+    numRows: 0,
+    totalCount: 0,
+    rows: [],
+  },
 };
 
 export default function sentenceReducer(state = initialState, action) {
@@ -18,7 +22,7 @@ export default function sentenceReducer(state = initialState, action) {
       return {
         ...state,
         isLoading: false,
-        visits: payload.visits,
+        visitors: payload?.visitors,
       };
     default:
       return state;

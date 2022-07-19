@@ -4,6 +4,11 @@ const initialState = {
   isLoading: false,
   saved: false,
   sentences: [],
+  savedSentences: {
+    numRows: 0,
+    totalCount: 0,
+    rows: [],
+  },
 };
 
 export default function sentenceReducer(state = initialState, action) {
@@ -20,6 +25,13 @@ export default function sentenceReducer(state = initialState, action) {
         ...state,
         isLoading: false,
         sentences: payload.sentences,
+      };
+    case sentenceTypes.LIST_SENTENCES:
+      console.log(payload, "===========}}}}}}}");
+      return {
+        ...state,
+        isLoading: false,
+        savedSentences: payload?.sentences,
       };
     case sentenceTypes.SAVE_SENTENCE:
       return {

@@ -1,10 +1,12 @@
-import * as React from 'react';
-import Box from '@mui/material/Box';
-import LinearProgress from '@mui/material/LinearProgress';
+import * as React from "react";
+import Box from "@mui/material/Box";
+import LinearProgress from "@mui/material/LinearProgress";
+import { useSelector, useDispatch } from "react-redux";
 
 export default function LinearBuffer() {
   const [progress, setProgress] = React.useState(0);
   const [buffer, setBuffer] = React.useState(10);
+  let { isLoading } = useSelector((state) => state.loadingReducer);
 
   const progressRef = React.useRef(() => {});
   React.useEffect(() => {
@@ -20,6 +22,7 @@ export default function LinearBuffer() {
       }
     };
   });
+  React.useEffect(() => {}, [isLoading]);
 
   React.useEffect(() => {
     const timer = setInterval(() => {
@@ -32,8 +35,16 @@ export default function LinearBuffer() {
   }, []);
 
   return (
-    <Box sx={{ width: '100%' }}>
-      <LinearProgress variant="buffer" value={progress} valueBuffer={buffer} />
+    <Box sx={{ width: "100%" }}>
+      {isLoading ? (
+        <LinearProgress
+          variant="buffer"
+          value={progress}
+          valueBuffer={buffer}
+        />
+      ) : (
+        <></>
+      )}
     </Box>
   );
 }

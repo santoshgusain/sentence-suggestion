@@ -23,7 +23,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser("santosh"));
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use(logUser);
+// app.use(logUser);
 
 app.use("/api", require("./routes"));
 
