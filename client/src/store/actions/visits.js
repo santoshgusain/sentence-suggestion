@@ -11,7 +11,7 @@ export const loadVisits =
       });
 
       const sentences = (
-        await axios.get("http://localhost:3001/api/logs", {
+        await axios.get(process.env.REACT_APP_BASE_URL + "/api/logs", {
           params: { perPage, page, sort, order },
         })
       )?.data;

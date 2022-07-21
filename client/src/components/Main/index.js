@@ -69,7 +69,8 @@ class Main extends Component {
   // function to load sentences array
   loadSentences = async () => {
     await this.props.loadSentence();
-    const { sentences } = this.props.sentenceReducer;
+    let { sentences } = this.props.sentenceReducer;
+    sentences = sentences?.sentences?.rows.map(({ sentence }) => sentence);
     const max = sentences.length,
       min = 0,
       index = Math.floor(Math.random() * (max - min) + min),

@@ -8,7 +8,7 @@ export const loadSentence = () => async (dispatch, getState) => {
     });
 
     const sentences = (
-      await axios.get("https://sentence-suggestion.herokuapp.com/api/sentence")
+      await axios.get(process.env.REACT_APP_BASE_URL + "/api/sentence")
     ).data;
     dispatch({
       type: loadingTypes.LOADED,
@@ -38,7 +38,7 @@ export const listSentences =
       });
 
       const sentences = (
-        await axios.get("http://localhost:3001/api/sentence", {
+        await axios.get(process.env.REACT_APP_BASE_URL + "/api/sentence", {
           params: { perPage, page, sort, order },
         })
       )?.data;
