@@ -173,7 +173,7 @@ function Admin({ component: Component }) {
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 1 }}>
         <DrawerHeader />
-        <Typography sx={{ mb: 0.5 }}>
+        <Typography >
           <Loader />
         </Typography>
         {Component ? <Component /> : <div></div>}

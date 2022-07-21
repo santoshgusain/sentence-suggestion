@@ -56,7 +56,7 @@ function Login(props) {
 
   return (
     <>
-      <Typography sx={{ mb: 0.5 }}>
+      <Typography>
         <Loader />
       </Typography>
       <Container>
